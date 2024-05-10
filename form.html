@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Permutação</title>
+    <style>
+    
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background-color: rgb(231, 231, 231);
+        }
+
+        .content {
+            width: 600px; /* Largura do quadrado */
+            height: 400px; /* Altura do quadrado */
+            padding: 20px;
+            border: 8px dashed green;
+            border-radius: 20px;
+            background-color: #f7f7f7;
+            position: relative;
+            animation: borderAnimation 0.8s infinite alternate;
+        }
+
+        @keyframes borderAnimation {
+            0% {
+                border: 5px solid #d1eeaf;
+            }
+            100% {
+                border: 2px solid #024e04;
+            }
+        }
+        @keyframes bounceAnimation {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px); 
+    }
+    100% {
+        transform: translateY(0);
+    }
+    }   
+    @keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+    }
+    @keyframes heartBeatAnimation {
+    0% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.05);
+    }
+    50% {
+        transform: scale(1);
+    }
+    75% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+ }
+
+        #titulo {
+            font-size: 35px;
+            color: rgb(0, 0, 0);
+            border-radius: 10px;
+            border-color: black;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(196, 196, 196, 0);
+            padding: 10px 20px;
+            white-space: nowrap;
+           
+        }
+
+        #permutationForm {
+            margin-top: 150px;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px; /* Bordas arredondadas */
+            font-size: 20px;
+            text-align: center;
+        }
+
+        button {
+            
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            background-color: green; /* Cor de fundo verde */
+            color: white;
+            border: none;
+            box-shadow: 0 0 5px green, 0 0 25px green;
+            transition: box-shadow 0.2s ease;
+            margin-top: 20px;
+            animation: heartBeatAnimation 2s infinite;
+        }
+
+        button:hover {
+            box-shadow: 0 0 5px green, 0 0 12px green, 0 0 25px green, 0 0 50px green, 0 0 100px green;
+        }
+
+        #result {
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 16px;
+            text-align: center;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: fadeInAnimation 4s ease-in;
+        }
+        #trocar{
+            margin-bottom: 20px;
+        }
+        .no-animation {
+            animation: none
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a id="trocar" href="form2.html"><button class="no-animation">Trocar calculadora</button></a>
+        <div class="content">
+            <h2 id="titulo">Calculadora de Permutação</h2>
+            <form id="permutationForm">
+                <label for="word">Digite uma palavra:</label><br>
+                <input type="text" id="word" name="word" required><br><br>
+                <button type="button" value="Calcular" onclick="calcularPermutacoes()">Calcular</button>
+            </form>
+            <div id="result"></div>
+            
+        </div>
+    </div>
+
+    <script>
+        function fatorate(n) {
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        function permutate(word) {
+            const lettersSet = new Set(word);
+            const lettersRepetitionDict = {};
+
+            for (let i = 0; i < word.length; i++) {
+                const letter = word[i];
+                if (lettersRepetitionDict.hasOwnProperty(letter)) {
+                    lettersRepetitionDict[letter]++;
+                } else {
+                    lettersRepetitionDict[letter] = 1;
+                }
+            }
+
+            let numberOfLetters = lettersSet.size;
+            let k = 1;
+
+            for (const value of Object.values(lettersRepetitionDict)) {
+                k *= fatorate(value);
+            }
+
+            const n = fatorate(word.length);
+            const permutationResult = Math.floor(n / k);
+
+            return permutationResult;
+        }
+
+        function calcularPermutacoes() {
+            const word = document.getElementById("word").value;
+            const result = permutate(word);
+            document.getElementById("result").innerHTML = `"${word}" pode ser organizada de ${result} formas diferentes.`;
+        }
+    </script>
+</body>
+</html>
